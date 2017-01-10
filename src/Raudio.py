@@ -229,7 +229,7 @@ class FromSystem(AudioWorker):
         offset = 0
 
         #first read and write
-        frame = self.stream.read(1)
+        frame = self.stream.read(1, exception_on_overflow = False)
         audio.writeframes(frame)
 
         #it's inclusive. means frame <= threshold
@@ -241,7 +241,7 @@ class FromSystem(AudioWorker):
         reading immediately.
         """
         while(self.compare(frame) == under and not self.isStopped()):
-            frame = self.stream.read(1)
+            frame = self.stream.read(1, exception_on_overflow = False)
             audio.writeframes(frame)
 
         chunk = Chunk(0, audio.getnframes(), under, not under, 
