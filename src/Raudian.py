@@ -31,6 +31,17 @@ MIN_SONG_LENGTH = 1         #1 second. Sounds of shorter length will be discarde
 MAX_SILENCE_LENGTH = 0.2    #0.2 seconds. The max time of silence tolerated within a song
 
 
+def resource_path(relative_path):
+    """ Get absolute path to resource, works for dev and for PyInstaller """
+    try:
+        # PyInstaller creates a temp folder and stores path in _MEIPASS
+        base_path = sys._MEIPASS
+    except Exception:
+        base_path = os.path.abspath(".")
+
+    return os.path.join(base_path, relative_path)
+
+
 class RaudianFrame(wx.Frame):
 
     ####################################################################
@@ -91,8 +102,8 @@ class RaudianFrame(wx.Frame):
         main_sizer.Add(line, 0, wx.GROW|wx.ALIGN_CENTER_VERTICAL|wx.ALL, 5)
 
         #button
-        self.record_bitmap = wx.Bitmap("record32x32.png", wx.BITMAP_TYPE_PNG)
-        self.stop_bitmap = wx.Bitmap("stop32x32.png", wx.BITMAP_TYPE_PNG)
+        self.record_bitmap = wx.Bitmap(resource_path("record32x32.png"), wx.BITMAP_TYPE_PNG)
+        self.stop_bitmap = wx.Bitmap(resource_path("stop32x32.png"), wx.BITMAP_TYPE_PNG)
         self.button = wx.BitmapButton(self, bitmap = self.record_bitmap)
         self.button.Bind(wx.EVT_BUTTON, self.on_click_button)
         main_sizer.Add(self.button, 0, wx.ALL, 5)
@@ -103,7 +114,7 @@ class RaudianFrame(wx.Frame):
 
 
         #init frame
-        icon = wx.IconFromBitmap(wx.Bitmap("icon.ico", wx.BITMAP_TYPE_ANY))
+        icon = wx.IconFromBitmap(wx.Bitmap(resource_path("icon.ico"), wx.BITMAP_TYPE_ANY))
         self.SetIcon(icon)
         self.Bind(wx.EVT_CLOSE, self.on_close)
         self.SetMinSize(self.GetSize())
